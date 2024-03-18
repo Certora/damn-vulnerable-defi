@@ -1,5 +1,2 @@
-node_modules
-build
-contracts/attacker-contracts/*.sol
-*.solved.js
-cache
+**.certora_internal
+**.DS_Store
