@@ -22,11 +22,13 @@ In this challenge, there's a tokenized vault housing a million DVT tokens, curre
 ## Execution
 
 ```
-certoraRun contracts/unstoppable/FirstChallenge.conf --server staging --prover_version master
+certoraRun contracts/unstoppable/FirstChallenge.conf
 ```
 
 ## Results
 
-[Certora Results](https://prover.certora.com/output/1512/478297d78de540edb46b7fa18dcdc81f?anonymousKey=a61c4eeedb2ab7e1deb6d684c35baafa8cb56cd1)
+[Certora Results](https://prover.certora.com/output/1512/1b14f7e64fd841cdba46e160a5c418ab?anonymousKey=12bee694f43bafa5df07abcb788fa65cb9d68130)
 
-The analysis reveals that the attacker can directly send DVT tokens to the lender contract, causing the `balanceBefore` assertion to consistently fail due to the `poolBalance` variable not being updated. This exploit renders flash loans unusable.
+The analysis reveals that the attacker can directly send DVT tokens to the lender contract (or use transferFrom), causing the `balanceBefore` assertion to consistently fail due to the `poolBalance` variable not being updated. This exploit renders flash loans unusable.
+
+[Certora Results On Fix Version](https://prover.certora.com/output/1512/a5ba2f7458d5420aac760d61aac1f2db?anonymousKey=4bfd373d9e1ba1dca2e5a2d44a637e66bf0cc3ae)

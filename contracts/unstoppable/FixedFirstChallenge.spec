@@ -1,4 +1,4 @@
-using UnstoppableLender as lender;
+using FixedUnstoppableLender as lender;
 using DamnValuableToken as token;
 
 methods{
