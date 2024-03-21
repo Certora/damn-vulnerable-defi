@@ -1,4 +1,4 @@
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
@@ -13,7 +13,7 @@ contract NaiveReceiverLenderPool is ReentrancyGuard {
     function fixedFee() external pure returns (uint256) {
         return FIXED_FEE;
     }
-
+    
     function flashLoan(address payable borrower, uint256 borrowAmount) external nonReentrant {
 
         uint256 balanceBefore = address(this).balance;
