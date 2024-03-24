@@ -5,6 +5,7 @@ methods {
     //function flashLoan(address, uint256) external envfree;
     //function fixedFee() external returns(uint256) envfree;
     function _.receiveEther(uint256) external => DISPATCHER(true);
+    function _.flashLoan(address, uint256) external => DISPATCHER(true);
     function attack(address, address) external envfree;
 }
 
