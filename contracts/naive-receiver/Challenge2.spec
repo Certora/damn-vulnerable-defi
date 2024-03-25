@@ -16,7 +16,7 @@ rule flashLoanDoesNotChangeThirdParty {
 }
 */
 
-rule noChangeToOtherUser(method f) filtered { f -> f.contract == currentContract } {
+rule noChangeToOtherUser(method f){// filtered { f -> f.contract == currentContract } {
     env e;
     calldataarg args;
     address someUser;
@@ -26,5 +26,5 @@ rule noChangeToOtherUser(method f) filtered { f -> f.contract == currentContract
     f(e, args);
     
     assert someUserBalanceBefore != nativeBalances[someUser] => 
-           someUser == e.msg.sender || someUser == currentContract;
+           someUser == e.msg.sender || someUser == f.contract;
 }
