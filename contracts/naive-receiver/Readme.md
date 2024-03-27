@@ -4,7 +4,7 @@ A user has deployed a contract with 10 ETH in balance. It’s capable of interac
 Take all ETH out of the user’s contract. If possible, in a single transaction.
 
 ### Finding The Bug
-Using the prover we wrote a parametric rule `noChangeToOtherUser` that checks that no interaction with the pool can result in
+A rather common parametric rule `noChangeToOtherUser` checks that no interaction with the pool can result in
 the balance of some other user to change. An address that calls a function of the pool should only be able to affect the balances of itself and the pool contract.
 
 Let's run this rule using: 
