@@ -8,7 +8,7 @@ interface IReceiver {
     function receiveTokens(address tokenAddress, uint256 amount) external;
 }
 
-contract FixedUnstoppableLender is ReentrancyGuard {
+contract UnstoppableLender is ReentrancyGuard {
     using SafeMath for uint256;
 
     IERC20 public damnValuableToken;

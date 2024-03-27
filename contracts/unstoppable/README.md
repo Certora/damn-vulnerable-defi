@@ -1,8 +1,8 @@
-# First Challenge
+# First Challenge: Halting Flash Loans
 
-## Challenge #1 - Halting Flash Loans
+## Challenge Overview
 
-In this challenge, there's a tokenized vault housing a million DVT tokens, currently offering free flash loans until a grace period ends. The task is to deactivate the vault's ability to offer flash loans.
+In this challenge, we aim to address vulnerabilities in a tokenized vault that offers free flash loans until a grace period ends. The primary objective is to deactivate the vault's ability to provide flash loans.
 
 ### 1. Contracts
 
@@ -21,7 +21,7 @@ In this challenge, there's a tokenized vault housing a million DVT tokens, curre
 
 ## Execution
 
-```
+```bash
 certoraRun contracts/unstoppable/FirstChallenge.conf
 ```
 
@@ -29,6 +29,24 @@ certoraRun contracts/unstoppable/FirstChallenge.conf
 
 [Certora Results](https://prover.certora.com/output/1512/1b14f7e64fd841cdba46e160a5c418ab?anonymousKey=12bee694f43bafa5df07abcb788fa65cb9d68130)
 
-The analysis reveals that the attacker can directly send DVT tokens to the lender contract (or use transferFrom), causing the `balanceBefore` assertion to consistently fail due to the `poolBalance` variable not being updated. This exploit renders flash loans unusable.
+The analysis reveals that the attacker can directly send DVT tokens to the lender contract (or use `transferFrom`), causing the `balanceBefore` assertion to consistently fail due to the `poolBalance` variable not being updated. This exploit renders flash loans unusable.
 
-[Certora Results On Fix Version](https://prover.certora.com/output/1512/a5ba2f7458d5420aac760d61aac1f2db?anonymousKey=4bfd373d9e1ba1dca2e5a2d44a637e66bf0cc3ae)
+In order to fix the issue, the assert condition is modified from:
+
+```solidity
+assert(poolBalance == balanceBefore);
+```
+
+To:
+
+```solidity
+assert(poolBalance <= balanceBefore);
+```
+
+### Execution
+
+```bash
+certoraRun contracts/unstoppable/FixedFirstChallenge.conf
+```
+
+[Certora Results On Fix Version](https://prover.certora.com/output/1512/2626b553ef404f9aad184b26d94da7e7?anonymousKey=f0c5da4e4c56ee4eb5fbd6359bfa092c563fb97a)
