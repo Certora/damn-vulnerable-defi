@@ -10,7 +10,7 @@ the balance of some other user to change. An address that calls a function of th
 Let's run this rule using: 
 ```certoraRun contracts/naive-receiver/Challenge2.conf```
 
-[A report of that run](https://prover.certora.com/output/15800/2ed2f32a303f4671be1256aff8f63a85?anonymousKey=eb718cec5c0eb4906f8818634b9cb83e91b7a3c8)
+[A report of that run](https://prover.certora.com/output/15800/2c9332ff3482449cb85e00e6ac696934?anonymousKey=7a22a08b20334987a38f73c493f84775d12ee52a)
 
 We can see that the rule failed. Inspecting the call trace we can see that's something is wrong here, a random user was able to call the `flashLoan` function for our FlashLoanReceiver without any permission or allowance. This is the bug, because any user can ask for a flashLoan for a random borrower he can actually keep calling the flashLoan function as many times as he wants, and every time the borrower would have to pay the fee even though he didn't not asked to borrower.
 
@@ -20,4 +20,4 @@ To fix the bug we removed the borrower parameter from the `flashLoan` function o
 To run the fixed version:
 ```certoraRun contracts/naive-receiver/Challenge2Fixed.conf```
 
-[A report of that run](https://prover.certora.com/output/15800/59e310de9bdf4dd9bcc17cbc77833256?anonymousKey=c66904b942615ce58823e9f868cead87d914c20a)
+[A report of that run](https://prover.certora.com/output/15800/dae10f305c904a83a725bb8de0b480c7?anonymousKey=907f5e1f126037620f3f7c263ef9af8f233f6b00)
