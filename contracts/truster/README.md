@@ -48,7 +48,7 @@ The fix involve enforce the target to implement predefine interface function whi
 - `contracts/DamnValuableToken.sol`
 
 ### Spec
-- `contracts/truster/FixedTrusterLenderPool.spec`
+- `contracts/truster/TrusterLenderPool.spec`
 
 ### Execution
 
@@ -57,4 +57,4 @@ certoraRun contracts/truster/FixedTruster.conf
 ```
 
 ### Results
-[Certora Results](https://prover.certora.com/output/1512/c120286836be4f01840045074381bf4f?anonymousKey=d52b708933e5a6166a2b517fc9440344415c26a5)
+[Certora Results](https://prover.certora.com/output/1512/c0b089254623435e80216483437582f2?anonymousKey=09697121eafc49bf34b390436ea8014ac0e1b5b6)
