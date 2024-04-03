@@ -1,4 +1,4 @@
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
@@ -21,7 +21,7 @@ contract FlashLoanerPool is ReentrancyGuard {
         uint256 balanceBefore = liquidityToken.balanceOf(address(this));
         require(amount <= balanceBefore, "Not enough token balance");
 
-        require(msg.sender.isContract(), "Borrower must be a deployed contract");
+        require(Address.isContract(msg.sender), "Borrower must be a deployed contract");
         
         liquidityToken.transfer(msg.sender, amount);
 

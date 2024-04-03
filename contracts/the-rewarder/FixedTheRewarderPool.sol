@@ -42,6 +42,7 @@ contract TheRewarderPool {
      */
     function deposit(uint256 amountToDeposit) external {
         require(amountToDeposit > 0, "Must deposit tokens");
+        require(!isContract(msg.sender), "Must not be called in a flashloan");
         
         accToken.mint(msg.sender, amountToDeposit);
         distributeRewards();
@@ -99,5 +100,4 @@ contract TheRewarderPool {
     function isContract(address addr) public returns (bool) {
         return Address.isContract(addr);
     }
-
 }
