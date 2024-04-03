@@ -2,7 +2,7 @@
 
 ## Challenge Overview
 
-In this challenge, we aim to address vulnerabilities in the reward distribution mechanism of the protocol, we desire to find a way to get most of rewards without posses or supply any liquidity token for the pool.
+In this challenge, we aim to address vulnerabilities in the reward distribution mechanism of the protocol, we desire to find a way to get most of the rewards without possessing or supplying any liquidity token for the pool.
 
 ### 1. Contracts
 
@@ -18,7 +18,7 @@ In this challenge, we aim to address vulnerabilities in the reward distribution 
 
 #### Example Specifications:
 
-- **DepositCantBeInvokedByFlashLoan**: Make sure that deposit function is protected against flashloan attack.
+- **DepositCantBeInvokedByFlashLoan**: Ensure the `deposit` function is protected against flashloan attack.
 
 ## Execution
 
@@ -30,10 +30,10 @@ certoraRun contracts/the-rewarder/FifthChallenge.conf
 
 [Certora Results](https://vaas-stg.certora.com/output/1512/3af3642d5e724ddb9d3eee1812284fed?anonymousKey=b9b4bb00a48450f176f1a28dc5f09298d17fbbe9)
 
-The analysis reveals that the attacker can use flashloan to deposit loaned DVT tokens to the reward poll contract and get account token which then can be used to be eligible for the reward token distribution, in the same transaction the attacker can also call the `withdraw` function to payback the loan.
+The analysis reveals that the attacker can use the flash loan to deposit loaned DVT tokens to the reward poll contract and get an account token which then can be used to be eligible for the reward token distribution, in the same transaction the attacker can also call the `withdraw` function to pay back the loan.
 
-In order to fix the issue, another require should be added to the `deposit` function
-which will grantee that the depositor user is not a flashloan contract:
+In order to fix the issue, another `require` should be added to the `deposit` function
+which will guarantee that the depositor user is not a flash loan contract:
 
 ```solidity
 require(!Address.isContract(msg.sender));
