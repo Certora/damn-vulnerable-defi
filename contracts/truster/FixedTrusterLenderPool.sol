@@ -3,7 +3,12 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract TrusterLenderPool is ReentrancyGuard {
+interface IReceiver {
+    function execute(bytes memory data) external returns (bool, uint256);
+}
+
+contract FixedTrusterLenderPool is ReentrancyGuard {
+    
 
     IERC20 public damnValuableToken;
 
@@ -24,7 +29,7 @@ contract TrusterLenderPool is ReentrancyGuard {
         require(balanceBefore >= borrowAmount, "Not enough tokens in pool");
         
         damnValuableToken.transfer(borrower, borrowAmount);
-        (bool success, ) = target.call(data);
+        (bool success, ) = IReceiver(target).execute(data);
         require(success, "External call failed");
 
         uint256 balanceAfter = damnValuableToken.balanceOf(address(this));
