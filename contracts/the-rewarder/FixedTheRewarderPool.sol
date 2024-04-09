@@ -3,7 +3,6 @@ pragma solidity ^0.8.20;
 import "./RewardToken.sol";
 import "../DamnValuableToken.sol";
 import "./AccountingToken.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
 
 contract TheRewarderPool {
 
@@ -42,11 +41,10 @@ contract TheRewarderPool {
      */
     function deposit(uint256 amountToDeposit) external {
         require(amountToDeposit > 0, "Must deposit tokens");
-        require(!isContract(msg.sender), "Must not be called in a flashloan");
         
-        accToken.mint(msg.sender, amountToDeposit);
         distributeRewards();
-
+        accToken.mint(msg.sender, amountToDeposit);
+        
         require(
             liquidityToken.transferFrom(msg.sender, address(this), amountToDeposit)
         );
@@ -97,7 +95,4 @@ contract TheRewarderPool {
         return block.timestamp >= lastRecordedSnapshotTimestamp + REWARDS_ROUND_MIN_DURATION;
     }
 
-    function isContract(address addr) public returns (bool) {
-        return Address.isContract(addr);
-    }
 }

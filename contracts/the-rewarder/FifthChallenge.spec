@@ -1,18 +1,24 @@
 using FlashLoanerPool as flashloan;
+using RewardToken as rewardToken;
 
 /*
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ DepositFunction cant be used by flashloan                                                                           │
+│ Deposit increase reward token balance with the same amount as distribute rewards                                                    │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 */
-rule DepositCantBeInvokedByFlashLoan()
+rule rewardTokenIncreaseIntegrity()
 {
-	env e;
-    require e.msg.sender == flashloan && isContract(e, e.msg.sender);
-
+    env e;
+    address user;
     uint256 amount;
 
-    deposit@withrevert(e, amount);
+    storage init = lastStorage;
 
-    assert lastReverted;
+    distributeRewards(e);
+    uint256 balanceAfterDistributeRewards = rewardToken.balanceOf(e, user);
+    
+    deposit(e, amount) at init;
+    uint256 balanceAfterDeposit = rewardToken.balanceOf(e, user);
+    
+    assert balanceAfterDistributeRewards == balanceAfterDeposit;
 }

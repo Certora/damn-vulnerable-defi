@@ -16,9 +16,9 @@ In this challenge, we aim to address vulnerabilities in the reward distribution 
 
 - `contracts/the-rewarder/FifthChallenge.spec`
 
-#### Example Specifications:
+#### Properties:
 
-- **DepositCantBeInvokedByFlashLoan**: Ensure the `deposit` function is protected against flashloan attack.
+- **rewardTokenIncreaseIntegrity**: Ensure the `deposit` and `distributeRewards` functions increase the user reward token balance by the same amount.
 
 ## Execution
 
@@ -28,15 +28,22 @@ certoraRun contracts/the-rewarder/FifthChallenge.conf
 
 ## Results
 
-[Certora Results](https://vaas-stg.certora.com/output/1512/3af3642d5e724ddb9d3eee1812284fed?anonymousKey=b9b4bb00a48450f176f1a28dc5f09298d17fbbe9)
+[Certora Results](https://vaas-stg.certora.com/output/1512/54e0dbdbee424fd99c4c11f23a56b4fe?anonymousKey=9fe98ce0290bb113227e3d4b9d30b0e739b303b9)
 
-The analysis reveals that the attacker can use the flash loan to deposit loaned DVT tokens to the reward poll contract and get an account token which then can be used to be eligible for the reward token distribution, in the same transaction the attacker can also call the `withdraw` function to pay back the loan.
+The analysis reveals that the `deposit` function can increase the user reward balance more than the `distributeRewards` function, this vulnerability can be exploit by the user to earn more reward token via `flashloan` thats calls the deposit function in a single transaction.
 
-In order to fix the issue, another `require` should be added to the `deposit` function
-which will guarantee that the depositor user is not a flash loan contract:
+In order to fix the issue, the order of the reward calculation and balance update should change in the `deposit` function, which will guarantee that the user reward token balance will increase by the same amount for each call:
 
 ```solidity
-require(!Address.isContract(msg.sender));
+accToken.mint(msg.sender, amountToDeposit);
+distributeRewards();
+```
+
+changed to:
+
+```solidity
+distributeRewards();
+accToken.mint(msg.sender, amountToDeposit);
 ```
 
 ### Execution
@@ -45,6 +52,4 @@ require(!Address.isContract(msg.sender));
 certoraRun contracts/the-rewarder/FixedFifthChallenge.conf
 ```
 
-will be green after the fix of https://certora.atlassian.net/browse/CERT-5732
-
-[Certora Results On Fix Version](https://prover.certora.com/output/1512/2626b553ef404f9aad184b26d94da7e7?anonymousKey=f0c5da4e4c56ee4eb5fbd6359bfa092c563fb97a)
+[Certora Results On Fix Version](https://vaas-stg.certora.com/output/1512/43426ee490a843b980aadfa76240df28?anonymousKey=b7de7543e392cd7f00e6744814b453a109930b0e)

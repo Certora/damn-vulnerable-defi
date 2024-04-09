@@ -3,7 +3,6 @@ pragma solidity ^0.8.20;
 import "./RewardToken.sol";
 import "../DamnValuableToken.sol";
 import "./AccountingToken.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
 
 contract TheRewarderPool {
 
@@ -94,10 +93,6 @@ contract TheRewarderPool {
 
     function isNewRewardsRound() public view returns (bool) {
         return block.timestamp >= lastRecordedSnapshotTimestamp + REWARDS_ROUND_MIN_DURATION;
-    }
-
-    function isContract(address addr) public returns (bool) {
-        return Address.isContract(addr);
     }
 
 }
