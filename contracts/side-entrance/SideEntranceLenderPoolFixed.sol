@@ -11,25 +11,32 @@ contract SideEntranceLenderPool {
 
     mapping (address => uint256) private balances;
 
+    uint256 internalAccounting;
+
+    constructor() public payable {
+        internalAccounting = msg.value;
+    }
+
     function deposit() external payable {
         balances[msg.sender] += msg.value;
+        internalAccounting += msg.value;
     }
 
     function withdraw() external {
         uint256 amountToWithdraw = balances[msg.sender];
         balances[msg.sender] = 0;
         payable(msg.sender).sendValue(amountToWithdraw);
+        internalAccounting -= amountToWithdraw;
     }
 
     function flashLoan(uint256 amount) external {
         uint256 balanceBefore = address(this).balance;
+        uint256 differenceBefore = address(this).balance - internalAccounting;
         require(balanceBefore >= amount, "Not enough ETH in balance");
-        uint256 userBalanceBefore = balances[msg.sender];
 
         IFlashLoanEtherReceiver(msg.sender).execute{value: amount}();
 
-        require(address(this).balance >= balanceBefore && 
-                balances[msg.sender] == userBalanceBefore, "Flash loan hasn't been paid back");        
+        require(address(this).balance - internalAccounting >= differenceBefore, "Flash loan hasn't been paid back");        
     }
 }
  

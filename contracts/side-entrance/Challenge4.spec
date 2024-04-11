@@ -7,19 +7,32 @@ only checks that it has at least the same balance as it did before (which holds 
 the eth).
 The user can then freely withdraw the funds since the pool registered them on him.
 */
-
 methods {
     function flashLoan(uint256) external;
-    function _.execute() external => HAVOC_ALL;
+    function _.execute() external => depositSummary() expect void;
 }
 
-rule flashLoanIntegrity {
+function depositSummary() {
     env e;
-    uint256 amount;
-
-    uint256 senderBalanceBefore = currentContract.balances[e.msg.sender];
-
-    flashLoan(e, amount);
-    
-    assert currentContract.balances[e.msg.sender] == senderBalanceBefore;
+    deposit(e);
 }
+
+ghost mathint sumOfBalances {
+    init_state axiom sumOfBalances == 0;
+}
+
+hook Sload uint256 balance balances[KEY address addr] {
+    require sumOfBalances >= to_mathint(balance);
+}
+
+hook Sstore balances[KEY address addr] uint256 newValue (uint256 oldValue) {
+    sumOfBalances = sumOfBalances - oldValue + newValue;
+}
+
+invariant nativBalanceIsSumOfBalances()
+    to_mathint(nativeBalances[currentContract]) >= sumOfBalances
+    {
+        preserved with (env e) {
+            require e.msg.sender != currentContract;
+        }
+    }
