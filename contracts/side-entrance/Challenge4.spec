@@ -9,12 +9,35 @@ The user can then freely withdraw the funds since the pool registered them on hi
 */
 methods {
     function flashLoan(uint256) external;
-    function _.execute() external => depositSummary() expect void;
+    function _.execute() external => simulateAlternatives() expect void;
 }
 
-function depositSummary() {
-    env e;
-    deposit(e);
+function simulateAlternatives() {
+    // simualte different options 
+    uint256 random;
+
+    // call deposit() 
+    if (random == 1) {
+        env e;
+        deposit(e);
+    }
+
+    // call withdraw()
+    else if (random == 2) {
+        env e;
+        withdraw(e);
+    }
+
+    // call flashloan again
+    else if (random == 3) {
+        env e;
+        uint256 newAmount;
+        flashLoan(e,newAmount);
+    }
+    // do nothing 
+    else  {
+        
+    }
 }
 
 ghost mathint sumOfBalances {
