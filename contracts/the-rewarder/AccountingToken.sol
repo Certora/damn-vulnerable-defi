@@ -1,6 +1,6 @@
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20Snapshot.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 /**

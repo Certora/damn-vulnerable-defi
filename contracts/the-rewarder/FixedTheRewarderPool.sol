@@ -42,9 +42,9 @@ contract TheRewarderPool {
     function deposit(uint256 amountToDeposit) external {
         require(amountToDeposit > 0, "Must deposit tokens");
         
-        accToken.mint(msg.sender, amountToDeposit);
         distributeRewards();
-
+        accToken.mint(msg.sender, amountToDeposit);
+        
         require(
             liquidityToken.transferFrom(msg.sender, address(this), amountToDeposit)
         );
