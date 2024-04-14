@@ -12,12 +12,10 @@ We want to check that the pool is solvent, that means that the amount of ETH the
 Let's run this invariant using: 
 ```certoraRun contracts/side-entrance/Challenge4.conf```
 
-[A report of that run](https://prover.certora.com/output/15800/5da8b876b52c44f4a8cd9b59b9eeca3c?anonymousKey=26d1ee5b21c5d19dbb1dfe83a260bebed15ad396)
+[A report of that run](https://prover.certora.com/output/15800/09103d29281f49ea99460371b3d650bc?anonymousKey=3e347321ecdd4c22b3a704c50ce10e770d7884c4)
 
-If you'll inspect the spec we wrote you'll notice that we summarized the execute function to call the deposit function of the pool. This is an under approximation since the execute function can actually do anything but the attack vector is through interaction with the pool during a flash loan.
-We can see that the invariant failed for the flashLoan function but also for withdraw. As a bonus our prover found that the sendValue method that withdraw uses can call anything (it havocs) and is vulnerable to reentrancy. This is out of the scope of the challenge though and that is the reason we excluded the withdraw function from the execute summarization.
-
-Focusing on the case where a user called the deposit function of the pool during a flash loan, we can see that it made the pool insolvent as that user was able to increase his balance in the contract with the funds he flash loaned and fool the contract that flash loan was paid back without actually paying it back.
+If you'll inspect the spec we wrote you'll notice that we summarized the execute function to simulate the different functions of the pool. This is an under approximation since the execute function can actually do anything but the attack vector is through interaction with the pool during a flash loan.
+The invariant failed for the flashLoan function. We can see that a user was able to make the pool insolvent, he was increase his balance in the contract with the funds he flash loaned and fool the contract that flash loan was paid back without actually paying it back.
 A user that exploited this case while asking for the entire ETH balance of the pool can after the flashloan call the withdraw function to empty the pool.
 
 ### Fixing The Bug
@@ -26,6 +24,4 @@ To fix this bug we added an internal accounting mechanism to the pool. This inte
 To run the fixed version:
 ```certoraRun contracts/naive-receiver/Challenge2Fixed.conf```
 
-[A report of that run](https://prover.certora.com/output/15800/eb0ab86a3006459f81abd827b682d82b?anonymousKey=3125d856b4ae90fbe98d8821a450d0cb6c51e2b2)
-
-Even though our pool is solvent now the invariant will still fail for the withdraw function as it is vulnerable like explained above.
+[A report of that run](https://prover.certora.com/output/15800/f25ef1a5f19b499c9cb9d7f7f65bbe50?anonymousKey=058f7081eefd92e14ad16f33139f91318a95c814)
