@@ -15,7 +15,7 @@ Let's run this invariant using:
 [A report of that run](https://prover.certora.com/output/15800/09103d29281f49ea99460371b3d650bc?anonymousKey=3e347321ecdd4c22b3a704c50ce10e770d7884c4)
 
 If you'll inspect the spec we wrote you'll notice that we summarized the execute function to simulate the different functions of the pool. This is an under approximation since the execute function can actually do anything but the attack vector is through interaction with the pool during a flash loan.
-The invariant failed for the flashLoan function. We can see that a user was able to make the pool insolvent, he was increase his balance in the contract with the funds he flash loaned and fool the contract that flash loan was paid back without actually paying it back.
+The invariant failed for the flashLoan function while calling back the withdraw function. We can see that a user was able to make the pool insolvent by increasing his balance in the contract with the funds he flash loaned and fooling the contract that flash loan was paid back without actually paying it back.
 A user that exploited this case while asking for the entire ETH balance of the pool can after the flashloan call the withdraw function to empty the pool.
 
 ### Fixing The Bug
