@@ -7,7 +7,7 @@ Starting with 1 ETH in balance, pass the challenge by taking all ETH from the po
 
 
 ### Finding The Bug
-We want to check that the pool is solvent, that means that the amount of ETH the pool has have to be at least the amount of the sum of balances the users deposited to the pool.
+We want to check that the pool is solvent. That means that the amount of ETH the pool holds has to be at least the sum of the balances the users deposited to the pool.
 
 Let's run this invariant using: 
 ```certoraRun contracts/side-entrance/Challenge4.conf```
